@@ -1,0 +1,18 @@
+El Problema:
+
+Tienes dos DataFrames (uno de entrenamiento y otro de prueba) con registros de fragmentos de huesos de dinosaurio. Las variables como densidad de calcio y porosidad tienen distribuciones no lineales muy extrañas. Necesitas entrenar una red neuronal para predecir a qué época pertenecen (Triásico, Jurásico, Cretácico) y extraer las probabilidades.
+
+Tu Misión:
+
+Escribe una función llamada predecir_epoca_dinosaurio(df_train, df_test, target_col) que realice lo siguiente:
+
+- Separe la matriz de características y la columna objetivo (especificada en target_col) tanto en el DataFrame de entrenamiento como en el de prueba.
+- Aplique un QuantileTransformer de sklearn con n_quantiles=10 y random_state=42. Debe ajustarse (fit) solo con los datos de entrenamiento y transformar (transform) tanto entrenamiento como prueba.
+- Entrene un modelo MLPClassifier (sklearn.neural_network) con hidden_layer_sizes=(10,), max_iter=200 y random_state=42 usando los datos de entrenamiento transformados.
+- Obtenga las probabilidades predichas utilizando predict_proba() sobre el conjunto de prueba ya transformado.
+- Devuelva un array de numpy bidimensional con estas probabilidades de clasificación.
+
+Restricciones:
+- No devolver las clases literales predichas ni el modelo entrenado.
+- No devolver tuplas ni DataFrames.
+- No usar bucles explícitos (for o while).
