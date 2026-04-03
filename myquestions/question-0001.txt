@@ -1,0 +1,17 @@
+El Problema:
+
+Trabajas en un proyecto de conservación de murciélagos. Tienes un DataFrame con grabaciones de señales de ecolocalización. Deseas identificar cuáles de estos pulsos son anómalos (ruido extremo o especies invasoras) sin contar con etiquetas previas.
+
+Tu Misión:
+
+Escribe una función llamada detectar_anomalias_murcielagos(df, contaminacion) que realice lo siguiente:
+
+- Aplique una media móvil (rolling mean) con ventana de tamaño 3 a la columna 'frecuencia_pico' para suavizar la señal.
+- Elimine las filas con valores faltantes generados por la media móvil.
+- Seleccione las columnas 'frecuencia_pico' (suavizada) y 'duracion_pulso' para formar una matriz de características.
+- Entrene un modelo IsolationForest (de sklearn.ensemble) con el nivel de contaminacion especificado y random_state=42.
+- Devuelva un array de numpy unidimensional con las predicciones del modelo (1 para pulso normal, -1 para anomalía) asignadas a cada registro.
+
+Restricciones:
+- No devolver el modelo entrenado ni DataFrames.
+- No usar bucles explícitos (for o while).
