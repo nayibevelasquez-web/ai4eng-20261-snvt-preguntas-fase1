@@ -1,0 +1,17 @@
+El Problema:
+
+Estás operando un prototipo de computador cuántico. Tienes lecturas ambientales (matriz de características en un DataFrame) y la tasa de error cuántico observada (array objetivo). Sin embargo, algunos sensores magnéticos fallaron, arrojando valores nulos (NaNs). Necesitas saber el error máximo absoluto al modelar este sistema.
+
+Tu Misión:
+
+Escribe una función llamada evaluar_errores_cuanticos(X_df, y_array) que reciba el DataFrame de características y el array objetivo, y realice lo siguiente:
+
+- Impute los valores faltantes en X_df usando KNNImputer de sklearn con n_neighbors=2.
+- Entrene un modelo Support Vector Regressor (SVR de sklearn.svm) configurado con kernel='rbf' y C=1.5 sobre los datos imputados.
+- Prediga las tasas de error usando el modelo SVR entrenado.
+- Calcule utilizando numpy el valor máximo absoluto de las diferencias entre las predicciones y el array objetivo real.
+- Devuelva un número float que represente este error máximo absoluto.
+
+Restricciones:
+- No devolver tuplas, diccionarios ni el modelo entrenado.
+- No usar bucles explícitos (for o while).
