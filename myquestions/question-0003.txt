@@ -1,0 +1,19 @@
+El Problema:
+
+Investigas la síntesis de aerogeles para trajes espaciales. Buscas medir la "Devianza de Poisson" de un modelo predictivo lineal que estima el rendimiento óptico del material basándose en su presión y temperatura de síntesis. Para indexar el resultado en la base de datos, el valor final debe ser un número entero.
+
+Tu Misión:
+
+Escribe una función llamada calcular_devianza_aerogel(df_materiales, target_name) que use pandas, numpy y sklearn para realizar lo siguiente:
+
+- Extraiga la matriz de características (todas las columnas excepto target_name) y el vector objetivo (columna target_name).
+- Modifique el vector objetivo para evitar errores matemáticos en la devianza: reemplace cualquier valor menor o igual a cero por 0.1 utilizando numpy.
+- Entrene un modelo de regresión Ridge (sklearn.linear_model) con alpha=2.0 y random_state=123 usando estos datos.
+- Prediga los valores de rendimiento óptico y trunque cualquier predicción negativa a 0.001 usando np.clip().
+- Calcule la métrica mean_poisson_deviance (de sklearn.metrics) entre el objetivo modificado y las predicciones truncadas.
+- Multiplique el resultado de la devianza por 1000 y conviértalo a un número entero (int), truncando los decimales.
+- Devuelva este número entero.
+
+Restricciones:
+- El resultado debe ser de tipo int. No devolver floats, DataFrames, ni el modelo.
+- No usar bucles explícitos (for o while).
