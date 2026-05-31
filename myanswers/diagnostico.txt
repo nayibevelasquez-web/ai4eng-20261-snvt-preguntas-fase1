@@ -1,7 +1,64 @@
-DIAGNÓSTICO DE VALIDACIÓN - SCOLLY NAYIBE VELASQUEZ
+DIAGNÓSTICO DE VALIDACIÓN Y ANÁLISIS DE CASOS DE USO
+ESTUDIANTE: SCOLLY NAYIBE VELASQUEZ
+CORREO: nayibe.velasquez@udea.edu.co
 
-* Pregunta 0014:
-Inicialmente, el script validador genérico arrojaba un fallo crítico de tipo 'TypeError: unsupported operand type(s) for -: str and str' al intentar evaluar la solución. Esto ocurría porque la columna objetivo de esta pregunta contiene etiquetas categóricas de texto ('Excelente', 'Moderado', 'Peligroso') y la función 'compare_outputs' intentaba aplicar la función matemática 'np.allclose' (restando los arrays de strings), lo cual causaba el quiebre del entorno.
+----------------------------------------------------------------------
+1. INFORME TÉCNICO DE VALIDACIÓN GENERAL
+----------------------------------------------------------------------
+El entorno de pruebas de Google Colab completó la ejecución de forma 
+exitosa tras corregirse una limitación estructural en el script base 
+del validador. 
 
-Nota de validación exitosa:
-Tras la corrección y actualización en la función de comparación del validador (reemplazando la operación aritmética por 'np.array_equal' cuando se detectan tipos de datos no numéricos/strings), el entorno logró correr por completo sin congelarse. La solución en 'answer-0014.py' fue evaluada con éxito y el repositorio obtuvo un resultado final perfecto de 4/4 respuestas correctas.
+Inicialmente, la función 'compare_outputs' generaba un error crítico:
+"TypeError: unsupported operand type(s) for -: 'str' and 'str'"
+Esto ocurría porque el validador forzaba el uso de 'np.allclose' en 
+arreglos con cadenas de texto (como las etiquetas de la pregunta 0014).
+
+La validación arrojó un resultado final PERFECTO tras la modificación:
+- Total answers checked: 4
+- Answers correct: 4 ['0014', '0277', '0416', '0475']
+- Errors / Incorrect: 0
+
+Líneas corregidas en el validador para permitir tipos no numéricos:
++ if not (np.issubdtype(expected.dtype, np.number) and np.issubdtype(actual_arr.dtype, np.number)):
++     if not np.array_equal(expected, actual_arr):
++         return False, "Array contents do not match (string/object comparison)"
+
+----------------------------------------------------------------------
+2. ANÁLISIS Y LOGICA DE EJECUCIÓN POR PREGUNTA ASSIGNADA
+----------------------------------------------------------------------
+
+* PREGUNTA 0014 (Creada por ulises.orozco)
+- Objetivo: Predicción del Índice de Calidad del Aire (ICA).
+- Análisis y Solución: Se requería procesar un DataFrame con fallos de 
+  sensores (NaN). Se implementó 'SimpleImputer' con estrategia de 
+  mediana para robustecer los datos climáticos y 'MinMaxScaler' para 
+  normalizar las escalas de partículas al rango [0,1]. La salida 'y' 
+  mantiene las etiquetas textuales originales, validando de forma 
+  correcta al comparar los elementos directamente tras el ajuste del script.
+
+* PREGUNTA 0475 (Creada por huber.londono)
+- Objetivo: Entrenamiento de clasificador básico.
+- Análisis y Solución: Se aisló la columna objetivo de las predictoras 
+  mediante operaciones de Pandas. Se instanció y entrenó de forma limpia 
+  un modelo 'LogisticRegression' de sklearn utilizando el método '.fit()'. 
+  La función retorna el estimador completamente entrenado y listo para 
+  inferencia, cumpliendo con la salida exacta del caso de uso.
+
+* PREGUNTA 0277 (Creada por felipe.madronero)
+- Objetivo: Recomendación de estrategias pedagógicas.
+- Análisis y Solución: Se aplicó un agrupamiento por 'estudiante_id'. 
+  Para resolver la tolerancia a empates en la actividad más frecuente, 
+  se extrajo el primer índice del método '.mode()[0]' garantizando el 
+  orden alfabético estricto. Las actividades resultantes se mapearon a 
+  las cadenas de recomendación textuales requeridas por medio de 
+  estructuras condicionales, devolviendo un diccionario nativo de Python.
+
+* PREGUNTA 0416 (Creada por santiago.imbachi)
+- Objetivo: Predicción cuadrática de consumo de energía.
+- Análisis y Solución: Se generó ingeniería de características creando 
+  la columna 'x_cuadrada' mediante la elevación exponencial de la 
+  temperatura. Se ajustó un modelo 'LinearRegression' clásico y se 
+  extrajeron los atributos estructurales '.coef_', '.intercept_' y el 
+  score '.score()' para la métrica R^2. Los resultados se estructuraron 
+  en un diccionario que emparejó idénticamente las llaves esperadas.
