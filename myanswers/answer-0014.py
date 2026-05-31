@@ -10,7 +10,10 @@ def preparar_datos(df: pd.DataFrame, target_col: str):
     """
     # 1. Separar las características (X_raw) y la columna objetivo (y)
     X_raw = df.drop(columns=[target_col])
-    y = df[target_col].values  # Tomamos los valores como numpy array para coincidir con el generador
+    
+    # Convertimos explícitamente a un array de NumPy con tipo string ('O' o 'str')
+    # para alinearnos con lo que espera recibir el validador en la comparación
+    y = np.array(df[target_col].values, dtype=object)
     
     # 2. Imputación por Mediana para rellenar los NaN
     imputer = SimpleImputer(strategy='median')
