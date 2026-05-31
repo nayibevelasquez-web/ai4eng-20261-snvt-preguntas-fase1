@@ -1,1 +1,7 @@
-sin novedades por el momento
+DIAGNÓSTICO DE VALIDACIÓN - SCOLLY NAYIBE VELASQUEZ
+
+* Pregunta 0014:
+Inicialmente, el script validador genérico arrojaba un fallo crítico de tipo 'TypeError: unsupported operand type(s) for -: str and str' al intentar evaluar la solución. Esto ocurría porque la columna objetivo de esta pregunta contiene etiquetas categóricas de texto ('Excelente', 'Moderado', 'Peligroso') y la función 'compare_outputs' intentaba aplicar la función matemática 'np.allclose' (restando los arrays de strings), lo cual causaba el quiebre del entorno.
+
+Nota de validación exitosa:
+Tras la corrección y actualización en la función de comparación del validador (reemplazando la operación aritmética por 'np.array_equal' cuando se detectan tipos de datos no numéricos/strings), el entorno logró correr por completo sin congelarse. La solución en 'answer-0014.py' fue evaluada con éxito y el repositorio obtuvo un resultado final perfecto de 4/4 respuestas correctas.
