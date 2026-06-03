@@ -3,62 +3,64 @@ ESTUDIANTE: SCOLLY NAYIBE VELASQUEZ
 CORREO: nayibe.velasquez@udea.edu.co
 
 ----------------------------------------------------------------------
-1. INFORME TÉCNICO DE VALIDACIÓN GENERAL
+1. INFORME DE VALIDACIÓN GENERAL
 ----------------------------------------------------------------------
-El entorno de pruebas de Google Colab completó la ejecución de forma 
-exitosa tras corregirse una limitación estructural en el script base 
-del validador. 
+El cuaderno de Google Colab corrió completo y de forma exitosa después 
+de que corregí un problema que traía el código del validador. 
 
-Inicialmente, la función 'compare_outputs' generaba un error crítico:
+Al principio, me salía un error que no me dejaba avanzar:
 "TypeError: unsupported operand type(s) for -: 'str' and 'str'"
-Esto ocurría porque el validador forzaba el uso de 'np.allclose' en 
-arreglos con cadenas de texto (como las etiquetas de la pregunta 0014).
+Esto pasaba porque el validador intentaba usar la función 'np.allclose' 
+para restar las respuestas, pensando que todas eran números. Como la 
+pregunta 0014 entrega texto ('Excelente', 'Moderado', 'Peligroso'), 
+Python no podía restar palabras y el sistema se me bloqueaba.
 
-La validación arrojó un resultado final PERFECTO tras la modificación:
-- Total answers checked: 4
-- Answers correct: 4 ['0014', '0277', '0416', '0475']
-- Errors / Incorrect: 0
+Al corregir la celda del validador para que acepte texto, el resultado 
+final fue perfecto:
+- Total de respuestas revisadas: 4
+- Respuestas correctas: 4 ['0014', '0277', '0416', '0475']
+- Respuestas incorrectas o con error: 0
 
-Líneas corregidas en el validador para permitir tipos no numéricos:
+Líneas que cambié en el validador para poder comparar el texto:
 + if not (np.issubdtype(expected.dtype, np.number) and np.issubdtype(actual_arr.dtype, np.number)):
 +     if not np.array_equal(expected, actual_arr):
 +         return False, "Array contents do not match (string/object comparison)"
 
 ----------------------------------------------------------------------
-2. ANÁLISIS Y LOGICA DE EJECUCIÓN POR PREGUNTA ASSIGNADA
+2. ANÁLISIS DE CÓMO HICE CADA PREGUNTA ASIGNADA
 ----------------------------------------------------------------------
 
 * PREGUNTA 0014 (Creada por ulises.orozco)
 - Objetivo: Predicción del Índice de Calidad del Aire (ICA).
-- Análisis y Solución: Se requería procesar un DataFrame con fallos de 
-  sensores (NaN). Se implementó 'SimpleImputer' con estrategia de 
-  mediana para robustecer los datos climáticos y 'MinMaxScaler' para 
-  normalizar las escalas de partículas al rango [0,1]. La salida 'y' 
-  mantiene las etiquetas textuales originales, validando de forma 
-  correcta al comparar los elementos directamente tras el ajuste del script.
+- Análisis y Solución: El ejercicio me pedía limpiar un DataFrame que tenía 
+  valores vacíos (NaN) por fallos en los sensores. Utilicé 'SimpleImputer' 
+  con la estrategia de la mediana para rellenar esos huecos con el valor central. 
+  Después usé 'MinMaxScaler' para acomodar los datos de los sensores en 
+  una escala de 0 a 1. Al final, dejé la variable 'y' con sus palabras 
+  originales tal como lo pedía el caso de uso de mi compañero.
 
 * PREGUNTA 0475 (Creada por huber.londono)
-- Objetivo: Entrenamiento de clasificador básico.
-- Análisis y Solución: Se aisló la columna objetivo de las predictoras 
-  mediante operaciones de Pandas. Se instanció y entrenó de forma limpia 
-  un modelo 'LogisticRegression' de sklearn utilizando el método '.fit()'. 
-  La función retorna el estimador completamente entrenado y listo para 
-  inferencia, cumpliendo con la salida exacta del caso de uso.
+- Objetivo: Entrenamiento de un clasificador básico.
+- Análisis y Solución: Primero separé los datos quitando la columna objetivo 
+  con la función '.drop()' para obtener las variables de entrenamiento (X). 
+  Luego, guardé la columna objetivo en (y). Después, llamé al modelo 
+  'LogisticRegression' de la librería sklearn y lo entrené usando el método 
+  '.fit(X, y)'. La función termina devolviendo el modelo entrenado y listo.
 
 * PREGUNTA 0277 (Creada por felipe.madronero)
 - Objetivo: Recomendación de estrategias pedagógicas.
-- Análisis y Solución: Se aplicó un agrupamiento por 'estudiante_id'. 
-  Para resolver la tolerancia a empates en la actividad más frecuente, 
-  se extrajo el primer índice del método '.mode()[0]' garantizando el 
-  orden alfabético estricto. Las actividades resultantes se mapearon a 
-  las cadenas de recomendación textuales requeridas por medio de 
-  estructuras condicionales, devolviendo un diccionario nativo de Python.
+- Análisis y Solución: Agrupé los datos de los alumnos por su ID usando 
+  '.groupby()'. Para cumplir con la regla de que si había un empate en la 
+  actividad más repetida se elegía por orden alfabético, utilicé '.mode()[0]' 
+  que toma la primera opción automáticamente. Al final, usé condiciones (if/elif) 
+  para cambiar las actividades por el texto de recomendación y guardé todo en 
+  un diccionario de Python.
 
 * PREGUNTA 0416 (Creada por santiago.imbachi)
-- Objetivo: Predicción cuadrática de consumo de energía.
-- Análisis y Solución: Se generó ingeniería de características creando 
-  la columna 'x_cuadrada' mediante la elevación exponencial de la 
-  temperatura. Se ajustó un modelo 'LinearRegression' clásico y se 
-  extrajeron los atributos estructurales '.coef_', '.intercept_' y el 
-  score '.score()' para la métrica R^2. Los resultados se estructuraron 
-  en un diccionario que emparejó idénticamente las llaves esperadas.
+- Objetivo: Predicción al cuadrado del consumo de energía.
+- Análisis y Solución: Como el problema decía que la temperatura y el consumo 
+  tenían una relación al cuadrado, creé una columna nueva llamada 'x_cuadrada' 
+  multiplicando la temperatura por sí misma. Organicé la matriz X, entrené 
+  el modelo de regresión lineal ('LinearRegression') y guardé los coeficientes, 
+  el intercepto y el puntaje R2 en un diccionario con los nombres exactos 
+  que pedía el ejercicio.
